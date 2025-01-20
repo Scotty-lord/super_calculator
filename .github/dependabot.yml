@@ -3,9 +3,9 @@ updates:
   - package-ecosystem: "gomod"  # Pour les dépendances Go
     directory: "/"              # Dossier racine du projet
     schedule:
-      interval: "daily"         # Vérification quotidienne
+      interval: "daily"         # Vérifications quotidiennes
 
   - package-ecosystem: "docker" # Pour les dépendances Docker
     directory: "/"              # Dossier racine du projet
     schedule:
-      interval: "daily"         # Vérification quotidienne
+      interval: "daily"         # Vérifications quotidiennes
