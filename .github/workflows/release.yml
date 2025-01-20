@@ -8,6 +8,7 @@ on:
 # Ajouter des permissions pour le GITHUB_TOKEN
 permissions:
   contents: write  # Permet de publier des releases
+  packages: write  # Permet de publier des packages Docker (optionnel)
 
 jobs:
   release:
@@ -36,5 +37,8 @@ jobs:
 
       - name: Build and push Docker image
         run: |
+          # Construire l'image Docker
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }} .
+
+          # Pousser l'image Docker
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
