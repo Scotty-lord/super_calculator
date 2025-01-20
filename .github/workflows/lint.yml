@@ -25,7 +25,7 @@ jobs:
 
       - name: Run Hadolint
         run: |
-          docker run --rm -i hadolint/hadolint:latest \
+          docker run --rm -i hadolint/hadolint:v2.10.0 \
           hadolint --ignore DL3020 --ignore DL3006 - \
           < Dockerfile
 
