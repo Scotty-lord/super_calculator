@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "gomod"  # Pour les dépendances Go
+    directory: "/"              # Dossier racine du projet
+    schedule:
+      interval: "daily"         # Vérification quotidienne
+
+  - package-ecosystem: "docker" # Pour les dépendances Docker
+    directory: "/"              # Dossier racine du projet
+    schedule:
+      interval: "daily"         # Vérification quotidienne
