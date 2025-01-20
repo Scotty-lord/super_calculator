@@ -1,44 +1,41 @@
-name: Release Workflow
-
-on:
-  push:
-    tags:
-      - "v*"  # Déclenché quand un tag commençant par "v" est poussé
-
-# Ajouter des permissions pour le GITHUB_TOKEN
-permissions:
-  contents: write  # Permet de publier des releases
-  packages: write  # Permet de publier des packages Docker (optionnel)
-
-jobs:
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: "1.19"
-
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v5  # Utilise la version v5
-        with:
-          args: release --rm-dist  # Option valide avec GoReleaser v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push Docker image
-        run: |
-          # Construire l'image Docker
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }} .
-
-          # Pousser l'image Docker
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+---
+  name: Release Workflow
+  
+  on:
+    push:
+      tags:
+        - "v*"
+  
+  permissions:
+    contents: write
+    packages: write
+  
+  jobs:
+    release:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+  
+        - name: Set up Go
+          uses: actions/setup-go@v4
+          with:
+            go-version: "1.19"
+  
+        - name: Run GoReleaser
+          uses: goreleaser/goreleaser-action@v5
+          with:
+            args: release --rm-dist
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+        - name: Login to Docker Hub
+          uses: docker/login-action@v2
+          with:
+            username: ${{ secrets.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_TOKEN }}
+  
+        - name: Build and push Docker image
+          run: |
+            docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }} .
+            docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}

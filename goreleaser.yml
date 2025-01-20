@@ -1,4 +1,4 @@
-# .goreleaser.yml
+---
 project_name: super_calculator
 builds:
   - env:
