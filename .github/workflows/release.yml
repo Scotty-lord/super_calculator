@@ -4,11 +4,12 @@
   on:
     push:
       tags:
-        - "v*"
+        - "v*"  # Déclenché quand un tag commençant par "v" est poussé
   
+  # Ajouter des permissions pour le GITHUB_TOKEN
   permissions:
-    contents: write
-    packages: write
+    contents: write  # Permet de publier des releases
+    packages: write  # Permet de publier des packages Docker
   
   jobs:
     release:
@@ -37,5 +38,8 @@
   
         - name: Build and push Docker image
           run: |
+            # Construire l'image Docker
             docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }} .
+  
+            # Pousser l'image Docker
             docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
