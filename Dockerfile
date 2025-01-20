@@ -1,5 +1,5 @@
 # Étape 1 : Construction
-FROM golang:1.19-alpine AS build
+FROM golang:1.23-alpine AS build
 
 # Définir le répertoire de travail
 WORKDIR /app
