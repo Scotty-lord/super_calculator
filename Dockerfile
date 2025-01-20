@@ -1,26 +1,11 @@
 # Étape 1 : Construction
-FROM ubuntu:20.04 AS build  
-
-# Installer les dépendances système nécessaires pour Go
-RUN apt-get update && apt-get install -y \
-    wget \
-    git \
-    && rm -rf /var/lib/apt/lists/*
-
-# Télécharger et installer Go
-ENV GO_VERSION=1.19  
-RUN wget https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
-    rm go${GO_VERSION}.linux-amd64.tar.gz
-
-# Ajouter Go au PATH
-ENV PATH="/usr/local/go/bin:${PATH}"
+FROM golang:1.19-alpine AS build
 
 # Définir le répertoire de travail
 WORKDIR /app
 
 # Copier les fichiers de dépendances Go
-COPY go.mod go.sum ./
+COPY go.mod go.sum ./  
 
 # Télécharger les dépendances Go
 RUN go mod download
@@ -30,3 +15,18 @@ COPY . .
 
 # Construire l'application
 RUN go build -o /calculator
+
+# Étape 2 : Exécution
+FROM gcr.io/distroless/base-debian10:nonroot  
+
+# Définir le répertoire de travail
+WORKDIR /
+
+# Copier l'exécutable depuis l'étape de construction
+COPY --from=build /calculator /calculator/  
+
+# Définir l'utilisateur non-root (déjà défini dans l'image distroless)
+# USER nonroot:nonroot  # Optionnel, car l'image distroless utilise déjà un utilisateur non-root
+
+# Définir le point d'entrée de l'application
+ENTRYPOINT ["/calculator"]
