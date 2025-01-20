@@ -5,6 +5,10 @@ on:
     tags:
       - "v*"  # Déclenché quand un tag commençant par "v" est poussé
 
+# Ajouter des permissions pour le GITHUB_TOKEN
+permissions:
+  contents: write  # Permet de publier des releases
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -34,4 +38,3 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }} .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
-          
