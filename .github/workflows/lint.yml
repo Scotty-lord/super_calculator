@@ -24,9 +24,15 @@ jobs:
         uses: actions/checkout@v3  # Utiliser la version v3 pour plus de cohérence
 
       - name: Run Hadolint
-        uses: hadolint/hadolint-action@v2.1.0
+        uses: hadolint/hadolint-action@v3.0.0  # Utiliser la version la plus récente disponible
         with:
           dockerfile: Dockerfile  # Chemin vers ton Dockerfile
+          recursive: false
+          no-color: false
+          no-fail: false
+          verbose: false
+          format: tty
+          failure-threshold: info
 
   super-linter:
     if: github.event_name == 'pull_request'  # Exécuté uniquement sur les PR
