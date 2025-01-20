@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2  # Utiliser la version v2 si v3 n'existe pas
+        uses: actions/checkout@v2  # Utiliser la version v2
 
       - name: Run Semgrep
         uses: returntocorp/semgrep-action@v1
@@ -21,20 +21,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v2  # Utiliser la version v2 si v3 n'existe pas
+        uses: actions/checkout@v2  # Utiliser la version v2
 
       - name: Run Hadolint
         run: |
-          docker run --rm -i hadolint/hadolint:v2.10.0 \
-          hadolint --ignore DL3020 --ignore DL3006 - \
-          < Dockerfile
+          cat Dockerfile | docker run --rm -i hadolint/hadolint:v2.10.0 \
+          hadolint --ignore DL3020 --ignore DL3006 -
 
   super-linter:
     if: github.event_name == 'pull_request'  # Exécuté uniquement sur les PR
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2  # Utiliser la version v2 si v3 n'existe pas
+        uses: actions/checkout@v2  # Utiliser la version v2
 
       - name: Run Super-Linter
         uses: github/super-linter@v4

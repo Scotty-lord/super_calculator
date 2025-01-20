@@ -1,5 +1,7 @@
 # Utiliser une image de base pour la construction avec une version explicite
-FROM golang:1.19-buster AS build
+FROM ubuntu:20.04  
+
+# Autres instructions...
 
 # Définir le répertoire de travail
 WORKDIR /app
